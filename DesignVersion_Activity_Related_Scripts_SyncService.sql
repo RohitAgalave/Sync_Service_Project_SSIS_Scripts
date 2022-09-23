@@ -1,7 +1,8 @@
+/*
 Design Sync SSIS Project Scripts
 Type : Design Version related scripts
 Contributor : Rohit Agalave
-
+*/
 
 
 
