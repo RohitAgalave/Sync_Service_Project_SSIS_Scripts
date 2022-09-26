@@ -47,13 +47,27 @@ end
 -- This SP will Insert New JSOn Or Replace Old JSON In mdm.SchemaUpdateTracker
 -------------------------------------------------------------------------------------------------------------
 
-ALTER PROCEDURE [sync].[SyncUpdateMDMTable] @FDID INT, @FDVID INT
+/*
+Name 
+	[Sync].[UpdateQueueStatus]
+
+Purpose
+	To insert an entry if record not exist, if record exist then update it by replacing Old JsonHash with new JsonHash
+
+Return
+
+Params
+	@FDID INT, @FDVID INT, @JsonHash NVARCHAR(MAX)
+
+History
+	 On 2022-08-02 SP Created
+
+*/
+
+CREATE PROCEDURE [Sync].[UpdateSchemaUpdateTrackerTable] @FDID INT, @FDVID INT, @JsonHash NVARCHAR(MAX)
 AS
 DECLARE @SID AS INT
-Declare @JsonHash NVARCHAR(MAX)
-set  @JsonHash = (select dbo.GZip(FormDesignVersionData) from ui.FormDesignVersion where FormDesignVersionID = @FDVID)
 SET @SID = (SELECT schemaupdatetrackerid FROM mdm.SchemaUpdateTracker WHERE FormdesignID = @FDID and FormdesignVersionID = @FDVID)
-
 IF(@SID is null)
 BEGIN
 	INSERT INTO mdm.SchemaUpdateTracker(FormDesignID,FormDesignVersionID,Status,OldJsonHash,CurrentJsonHash,AddedDate) 
